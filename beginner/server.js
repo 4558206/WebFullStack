@@ -1,6 +1,25 @@
 'use strict';
 
 var http = require('http');
+var url = require('url');
+
+function start(route) {
+    function onRequest(request, response) {
+        var pathname = url.parse(request.url).pathname;
+        console.log("Request for " + pathname + " received.");
+
+        route(pathname);
+
+        response.writeHead(200, {"Content-Type": "text/plain"});
+        response.write("Hello World");
+        response.end();
+    }
+
+    http.createServer(onRequest).listen(8888);
+    console.log("Server has started.");
+}
+
+exports.start = start;
 
 /*
 http.createServer(function(request, response) {
@@ -10,6 +29,7 @@ http.createServer(function(request, response) {
 }).listen(8888);
 */
 
+/*
 //创建http server，并传入回调函数：
 var server = http.createServer(function(request, response) {
     //回调函数接收request和response对象，
@@ -25,3 +45,4 @@ var server = http.createServer(function(request, response) {
 server.listen(8888);
 
 console.log('Server is running at http://127.0.0.1:8888/');
+*/
